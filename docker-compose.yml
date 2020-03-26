@@ -1,14 +1,14 @@
 version: "2"
 services:
   create:
-    build: ubuntu-create-file
-    image: opes/ubuntu-create-file
+    build: alpine-create-file
+    image: woa7/alpine-create-file
     volumes:
       - /wait
 
   wait:
-    build: ubuntu-wait-for-file
-    image: opes/ubuntu-wait-for-file
+    build: alpine-wait-for-file
+    image: woa7/alpine-wait-for-file
     volumes_from:
       - create
-    entrypoint: /wait-for-file.sh /wait/done
+    entrypoint: /wait-for-file.sh /wait/done /bin/sh
