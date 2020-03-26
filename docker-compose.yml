@@ -1,14 +1,14 @@
 version: "2"
 services:
   create:
-    build: alpine-create-file
-    image: woa7/alpine-create-file
+    build: create-file
+    image: woa7/wait-for-file:create-file
     volumes:
       - /wait
 
   wait:
-    build: alpine-wait-for-file
-    image: woa7/alpine-wait-for-file
+    build: wait-for-file
+    image: woa7/wait-for-file
     volumes_from:
       - create
     entrypoint: /wait-for-file.sh /wait/done /bin/sh
