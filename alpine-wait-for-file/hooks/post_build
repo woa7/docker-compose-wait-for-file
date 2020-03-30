@@ -1,4 +1,14 @@
 #!/bin/bash
+docker buildx inspect --bootstrap
+
+###!/bin/bash
+# thanks https://github.com/se1exin/
+# Register qemu-*-static for all supported processors except the
+# current one, but also remove all registered binfmt_misc before
+
+docker run --rm --privileged multiarch/qemu-user-static:register --reset
+docker buildx inspect --bootstrap
+
 curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -d
 
 env
