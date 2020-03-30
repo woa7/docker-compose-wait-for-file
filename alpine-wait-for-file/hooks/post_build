@@ -18,5 +18,7 @@ curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh |
 
 env
 set
+./bin/seihon publish -v $DOCKER_TAG --image-name $IMAGE_NAME --base-runtime-image alpine --dry-run --targets amd64,arm.v6,arm.v7,arm.v8,arm.v5,386
 
-./bin/seihon publish -v "latest" --image-name $IMAGE_NAME --base-runtime-image alpine --dry-run=false --targets 
+./bin/seihon publish -v $DOCKER_TAG --image-name $IMAGE_NAME --base-runtime-image alpine --dry-run=false --targets amd64,arm.v6,arm.v7,arm.v8,arm.v5,386
+#./bin/seihon publish -v "latest" --image-name $IMAGE_NAME --base-runtime-image alpine --dry-run=false --targets amd64,arm.v6,arm.v7,arm.v8,arm.v5,386
