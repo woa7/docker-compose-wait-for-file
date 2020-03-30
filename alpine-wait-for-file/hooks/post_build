@@ -1,0 +1,7 @@
+#!/bin/bash
+curl -sfL https://raw.githubusercontent.com/ldez/seihon/master/godownloader.sh | bash -s -- -d
+
+env
+set
+
+./bin/seihon publish -v "latest" --image-name $IMAGE_NAME --base-runtime-image alpine --dry-run=false --targets 
