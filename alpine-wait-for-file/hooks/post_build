@@ -1,4 +1,9 @@
 #!/bin/bash
+
+#WORKGING with 19.03.8 
+( mkdir $HOME/.docker/ ; true ) && echo $'{\n    "experimental": "enabled"\n}' | tee -a $HOME/.docker/config.json
+#WORKGING with 19.03.8 
+
 docker buildx inspect --bootstrap
 
 ###!/bin/bash
