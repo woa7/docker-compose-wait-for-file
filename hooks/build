@@ -10,6 +10,9 @@ docker build \
 echo "# end docker build ########################"
 
 echo "# start docker buildx build ########################"
+export DOCKER_CLI_EXPERIMENTAL=enabled
+export DOCKER_BUILDKIT=1
+docker buildx ls
 if [ "$QUICKBUILD" = "true" ]; then
 	ARCHGREP="grep linux/amd64"
 else

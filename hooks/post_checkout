@@ -23,7 +23,10 @@ BUILD_ARCH=$(echo "${DOCKERFILE_PATH}" | cut -d '.' -f 2)
 
   # Enable docker CLI experimental support (for 'docker buildx').
   export DOCKER_CLI_EXPERIMENTAL=enabled
+  export DOCKER_BUILDKIT=1
+
   # Instantiate docker buildx builder with multi-architecture support.
+docker buildx ls
   docker buildx create --name mybuilder
   docker buildx use mybuilder
   # Start up buildx and verify that all is OK.
