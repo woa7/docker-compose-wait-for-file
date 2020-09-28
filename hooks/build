@@ -1,7 +1,55 @@
 #!/bin/bash
+echo "# start docker build ########################"
 docker build \
     --file "${DOCKERFILE_PATH}" \
     --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
     --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
     --tag "$IMAGE_NAME" \
     .
+
+echo "# end docker build ########################"
+
+echo "# start docker buildx build ########################"
+if [ "$QUICKBUILD" = "true" ]; then
+	ARCHGREP="grep linux/amd64"
+else
+	#ARCHGREP="grep -v linux/amd64"
+	ARCHGREP="grep -v fooafaoefn33o"
+fi
+#docker buildx inspect --bootstrap | grep -i Platforms | cut -d":" -f2  | tr "," "\\n" | grep -v linux/amd64 | \
+docker buildx inspect --bootstrap | grep -i Platforms | cut -d":" -f2  | tr "," "\\n"
+docker buildx inspect --bootstrap | grep -i Platforms | cut -d":" -f2  | tr "," "\\n" | $ARCHGREP | \
+  while read -r line; do
+   #docker buildx rm $line
+if [ "$DOCKER_TAG" == "latest" ]
+then
+  export DOCKER_BUILDKIT=1
+  docker buildx build $progressFlag --platform "${line}" \
+    --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+    --build-arg VCS_REF="$(git rev-parse --short HEAD)" --file "${DOCKERFILE_PATH}" --tag "$IMAGE_NAME" . --push \
+  || docker buildx build $progressFlag --platform "${line}" \
+    --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+    --build-arg VCS_REF="$(git rev-parse --short HEAD)" --file "${DOCKERFILE_PATH}" --tag "$IMAGE_NAME" .
+#    || DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --tag ci-test . --push
+#  docker buildx build $progressFlag --platform "${line}" \
+#    --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+#    --build-arg VCS_REF="$(git rev-parse --short HEAD)" --file "${DOCKERFILE_PATH}" --tag "$IMAGE_NAME" . \
+#    || DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 \
+#    --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+#    --build-arg VCS_REF="$(git rev-parse --short HEAD)" --file "${DOCKERFILE_PATH}" --tag ci-test . \
+#    || docker build -f $DOCKERFILE_PATH --tag ci-test .
+  #docker buildx build $progressFlag --platform "${line}" --file "${DOCKERFILE_PATH}" -t $IMAGE_NAME . 
+else
+  export DOCKER_BUILDKIT=1
+  docker buildx build $progressFlag --platform "${line}" \
+    --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+    --build-arg VCS_REF="$(git rev-parse --short HEAD)" --file "${DOCKERFILE_PATH}" --tag "$IMAGE_NAME" . --push \
+  || docker buildx build $progressFlag --platform "${line}" \
+    --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+    --build-arg VCS_REF="$(git rev-parse --short HEAD)" --file "${DOCKERFILE_PATH}" --tag "$IMAGE_NAME" .
+  #export DOCKER_BUILDKIT=1
+  #docker buildx build $progressFlag --platform "${line}" --file "${DOCKERFILE_PATH}" -t $IMAGE_NAME . --push || DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --tag ci-test . --push || docker build -f $DOCKERFILE_PATH --tag ci-test . --push
+  #docker buildx build $progressFlag --platform "${line}" --file "${DOCKERFILE_PATH}" -t $IMAGE_NAME . || DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --tag ci-test . || docker build -f $DOCKERFILE_PATH --tag ci-test .
+fi
+
+echo "# end docker buildx build ########################"

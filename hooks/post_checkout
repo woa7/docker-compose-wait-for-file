@@ -18,6 +18,8 @@ BUILD_ARCH=$(echo "${DOCKERFILE_PATH}" | cut -d '.' -f 2)
   # Install QEMU multi-architecture support for docker buildx.
   #docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
   docker run --rm --privileged multiarch/qemu-user-static --reset
+  #docker run --rm --privileged multiarch/qemu-user-static
+  
 
   # Enable docker CLI experimental support (for 'docker buildx').
   export DOCKER_CLI_EXPERIMENTAL=enabled
