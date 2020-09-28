@@ -13,12 +13,17 @@ echo "# start docker buildx build ########################"
 export DOCKER_CLI_EXPERIMENTAL=enabled
 export DOCKER_BUILDKIT=1
 docker buildx ls
+  # Start up buildx and verify that all is OK.
+docker buildx inspect --bootstrap
+docker buildx ls
+
 if [ "$QUICKBUILD" = "true" ]; then
 	ARCHGREP="grep linux/amd64"
 else
 	#ARCHGREP="grep -v linux/amd64"
 	ARCHGREP="grep -v fooafaoefn33o"
 fi
+
 #docker buildx inspect --bootstrap | grep -i Platforms | cut -d":" -f2  | tr "," "\\n" | grep -v linux/amd64 | \
 docker buildx inspect --bootstrap | grep -i Platforms | cut -d":" -f2  | tr "," "\\n"
 docker buildx inspect --bootstrap | grep -i Platforms | cut -d":" -f2  | tr "," "\\n" | $ARCHGREP | \
