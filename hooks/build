@@ -52,4 +52,6 @@ else
   #docker buildx build $progressFlag --platform "${line}" --file "${DOCKERFILE_PATH}" -t $IMAGE_NAME . || DOCKER_BUILDKIT=1 docker buildx build --platform linux/amd64 --tag ci-test . || docker build -f $DOCKERFILE_PATH --tag ci-test .
 fi
 
+done
+
 echo "# end docker buildx build ########################"
